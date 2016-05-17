@@ -226,13 +226,11 @@
 	window.onload = function(){
 		var imgbtn = document.getElementById('getimgs');
 		var btn = document.getElementById('go');
-		// btn.onclick = function(){
-			// alert(1);
-			// imgbtn.click();
-		// }
-		imgbtn.onclick = function(){
-			alert(1);
+		 btn.onclick = function(){
+		 	alert(1);
+			imgbtn.click();
 		}
+	
 		imgbtn.onchange = function(){
 			// alert(this);
 			var imgs = readImgs(this).init(
