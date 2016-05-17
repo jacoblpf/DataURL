@@ -61,6 +61,9 @@
 	.produce p {
 		line-height: 30px;
 	}
+	.filters {
+		filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale); 
+	}
 	</style>
 </head>
 <body>
@@ -112,7 +115,9 @@
 		</ul>
 	</div>
 </div>
-
+<div id="log">
+	
+</div>
 
 </body>
 </html>
@@ -197,10 +202,15 @@
 						})(f.files[i]);
 					}
 				}else {
+					var str;
 					f.select();
            			var src = document.selection.createRange().text;
-           			var image = Cte('img').setAttr({'src':src}).setAttr(attr).css(sty).bindFunc(evt, cb1);
-					cb2(image.getE());
+           			var image = Cte('img').setAttr({'src':'http://vi1.6rooms.com/live/2016/05/18/00/1002v1463501606791129611_b.gif'}).setAttr(attr).css(sty).bindFunc(evt, cb1);
+           			var img = image.getE();
+           			img.className = "filters";
+           			cb2(image.getE());
+           			img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
+					
 				}
 			}
 			this.init = function(attr, sty, evt, cb1, cb2){
@@ -222,10 +232,27 @@
 		})();
 	
 		
-	
+	function IsPC() {
+	    var userAgentInfo = navigator.userAgent;
+	    var Agents = ["Android", "iPhone",
+	                "SymbianOS", "Windows Phone",
+	                "iPad", "iPod"];
+	    var flag = true;
+	    for (var v = 0; v < Agents.length; v++) {
+	        if (userAgentInfo.indexOf(Agents[v]) > 0) {
+	            flag = false;
+	            break;
+	        }
+	    }
+	    return flag;
+	}
 
 	window.onload = function(){
+
 		var imgbtn = document.getElementById('getimgs');
+		if (IsPC){
+			imgbtn.setAttribute('multiple','multiple');
+		}
 		var btn = document.getElementById('go');
 		btn.onclick = function(){
 			imgbtn.click();
