@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
 	<meta charset='utf-8'>
+	<meta name="viewport" content="width=device-widht">
 	<title>二进制读取图片并显示</title>
 	<style type="text/css">
 	*{
@@ -16,11 +17,13 @@
 		width: 200px;
 		height: 150px;
 		border: 1px solid #ccc;
-		background: url(http://image.tupian114.com/20140424/13131173.png) center no-repeat;
+		background: url('http://image.tupian114.com/20140424/13131173.png') center no-repeat;
+		/*background-image: url('http://image.tupian114.com/20140424/13131173.png');*/
 		background-color: #ccc;
 		position: relative;
 		cursor: pointer;
 		margin: 30px auto;
+		z-index: 1000;
 	}
 	.imgUpdate span {
 		position: absolute;
@@ -32,9 +35,12 @@
 	}
 	#getimgs {
 		opacity: 0;
+		filter: alpha(opacity=0);
 		width: 100%;
 		height: 100%;
 		cursor: pointer;
+		display: none;
+		z-index: -1;
 	}
 	.imgs:after {
 		content: "";
@@ -61,8 +67,8 @@
 	<header>
 		<h2>该js提供本地图片二进制读入，并实时显示在网页上</h2>
 	</header>
-	<div class="imgUpdate">
-		<input type="file" id="getimgs" multiple="multiple" value="" />
+	<div class="imgUpdate" id="go">
+		<input type="file" id="getimgs"  />
 		<span>点击上传图片</span>
 	</div>
 	<div class="imgs">
@@ -151,7 +157,18 @@
 			}
 			this.bindFunc = function(evt1, callback1){
 				if (evt1 && callback1){
-					e.addEventListener(evt1, callback1, false);
+					if (e.addEventListener){
+						e.addEventListener(evt1, callback1, false);
+					}else if (e.attachEvent){
+						e['e'+evt1+callback1] = callback1;
+						e[evt1+callback1] = function(){
+							e['e'+evt1+callback1](window.event);
+						}
+						e.attachEvent('on'+evt1, e[evt1+callback1]);
+					}else {
+						return false;
+					}
+					
 					return this;
 				}else {
 					return false;
@@ -166,8 +183,8 @@
 			var f = fs;
 			var imgs = [];
 			var read = function(attr, sty, evt, cb1, cb2){
-				if (f.length > 0){
-					for (var i = 0; i <f.length; i++){
+				if (f.files){
+					for (var i = 0; i <f.files.length; i++){
 						
 						(function(f1){
 							var reader = new FileReader();
@@ -176,8 +193,13 @@
 								var image = Cte('img').setAttr({'src':this.result}).setAttr(attr).css(sty).bindFunc(evt, cb1);
 								cb2(image.getE());
 							}
-						})(f[i]);
+						})(f.files[i]);
 					}
+				}else {
+					f.select();
+           			var src = document.selection.createRange().text;alert(src);
+           			var image = Cte('img').setAttr({'src':src}).setAttr(attr).css(sty).bindFunc(evt, cb1);
+					cb2(image.getE());
 				}
 			}
 			this.init = function(attr, sty, evt, cb1, cb2){
@@ -203,8 +225,17 @@
 
 	window.onload = function(){
 		var imgbtn = document.getElementById('getimgs');
+		var btn = document.getElementById('go');
+		// btn.onclick = function(){
+			// alert(1);
+			// imgbtn.click();
+		// }
+		imgbtn.onclick = function(){
+			alert(1);
+		}
 		imgbtn.onchange = function(){
-			var imgs = readImgs(this.files).init(
+			// alert(this);
+			var imgs = readImgs(this).init(
 				{'width':'200px','height':'200px'},
 				{"margin":'10px', 'float':'left'},
 				'click',
