@@ -34,10 +34,12 @@
 		bottom: 10px;
 	}
 	#getimgs {
+		position:fixed;
+		top:-100px;
 		opacity: 0;
 		filter: alpha(opacity=0);
-		width: 100%;
-		height: 100%;
+		width: 1px;
+		height: 1px;
 		cursor: pointer;
 		display: none;
 		z-index: -1;
@@ -197,7 +199,7 @@
 					}
 				}else {
 					f.select();
-           			var src = document.selection.createRange().text;alert(src);
+           			var src = document.selection.createRange().text;
            			var image = Cte('img').setAttr({'src':src}).setAttr(attr).css(sty).bindFunc(evt, cb1);
 					cb2(image.getE());
 				}
