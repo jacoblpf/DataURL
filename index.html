@@ -10,8 +10,21 @@
 		padding: 0;
 	}
 	.container {
-		width: 1120px;
+		width: 100%;
 		margin: 0 auto;
+	}
+	@media (min-width: 768px){
+		.container {width: 100%;}
+	}
+	@media (min-width: 980px){
+		.container {width: 90%;}
+	}
+	@media (min-width: 1200px){
+		.container {width: 70%;}
+	}
+	h2 {
+		margin:30px 0;
+		text-align:center;
 	}
 	.imgUpdate{
 		width: 200px;
